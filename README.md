@@ -1,5 +1,5 @@
 # 0x1B. C - Sorting algorithms & Big O
-ALX SE project covering the nitty gritty of sorting algorithms and the big O notation
+ALX SE project: taking a dive into sorting algorithms and the big O notation
 ## Learning objectives
  - Sorting algorithms e.g. bubble insertion, selection, and quick sort
  - Big O notation and evalution of time complexity
@@ -53,4 +53,4 @@ ALX SE project covering the nitty gritty of sorting algorithms and the big O not
 	- [1000-sort_deck.c](1000-sort_deck.c)
 	- [deck.h](deck.h)
 ## Author
- - [Stephen Makenzi Waweru](https://github.com/StephenMakenziWaweru/)
+ - [Yusuf Abdulwasiu Tunde](https://github.com/Yusuf-R/)
