@@ -1,10 +1,11 @@
 #include "sort.h"
+
 /**
  * selection_sort - sort the array using selection sort algorithm
  * @array: the pointer to the array
  * @size: the size of the array
  *
- * Return: the sorted array in ascending order using SSA
+ * Return: void
  */
 
 void selection_sort(int *array, size_t size)
@@ -12,7 +13,7 @@ void selection_sort(int *array, size_t size)
 	int temp;
 	size_t min_val, i, j;
 
-	if (!array || !size)
+	if (!array || !size || size < 2)
 		return;
 	for (i = 0; i < size - 1; i++)
 	{
