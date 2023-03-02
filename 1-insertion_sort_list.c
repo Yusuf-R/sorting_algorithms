@@ -1,55 +1,58 @@
 #include "sort.h"
 
 /**
- * node_swap - swaps out two nodes if one is greater than the other
- * @first: pointer to 1st node.
- * @second: pointer to 2nd node.
+ * node_swap - this function swaps two nodes
  *
- * Return: void
+ * @x: pointer to the first node
+ * @y: pointer to the second node
+ *
+ * Retunrn: void
  */
-void node_swap(listint_t *first, listint_t *second)
+
+void node_swap(listint_t *x, listint_t *y)
 {
-	if (first->prev)
-		first->prev->next = second;
-	if (second->next)
-		second->next->prev = first;
-	first->next = second->next;
-	second->prev = first->prev;
-	first->prev = second;
-	second->next = first;
+	if (x->prev)
+		x->prev->next = y;
+	if (y->next)
+		y->next->prev = x;
+	x->next = y->next;
+	y->prev = x->prev;
+	x->prev = y;
+	y->next = x;
 }
 
+
 /**
- * insertion_sort_list - sorts a doubly linked list of ints in ascending order
- * using the insertion sort algorithm.
+ * insertion_sort_list - this function impplements ISA
+ * on a double linked list
  *
- * @list: a doubly linked list of integers
+ * @list: double pointer to the array
  *
- * Return: void
+ * Retunrn: void
  */
+
 void insertion_sort_list(listint_t **list)
 {
-	listint_t *x, *y;
+	listint_t *trav,  *temp;
 
-	/* check for nullity */
-	if (!list || !*list || !(*list)->next)
+	if (!*list || !list || !(*list)->next)
 		return;
-	x = (*list)->next;
-	while (x)
+	trav = (*list)->next;
+	while (trav)
 	{
-		y = x;
-		x = x->next;
-		while (y && y->prev)
+		temp = trav;
+		trav = trav->next;
+		while (temp && temp->prev)
 		{
-			if (y->prev->n > y->n)
+			if (temp->prev->n  > temp->n)
 			{
-				node_swap(y->prev, y);
-				if (!y->prev)
-					*list = y;
+				node_swap(temp->prev, temp);
+				if (!temp->prev)
+					*list = temp;
 				print_list((const listint_t *) *list);
 			}
 			else
-				y = y->prev;
+				temp = temp->prev;
 		}
 	}
 }
