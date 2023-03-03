@@ -74,8 +74,8 @@ void lamuto_algo(int *array, size_t size, int start, int end)
 		lamuto_algo(array, size, start, pivot_index - 1);
 		lamuto_algo(array, size, pivot_index + 1, end);
 	}
-	else 
-		return;	
+	else
+		return;
 }
 
 
