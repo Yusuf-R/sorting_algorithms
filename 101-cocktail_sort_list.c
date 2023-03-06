@@ -1,90 +1,104 @@
 #include "sort.h"
+
 /**
-*swap - swaps 2 nodes in a doubly-linked list
-*@a: address of first node
-*@b: address of second node
-*
-*Return: void
-*/
-void swap(listint_t *a, listint_t *b)
+ * node_swap - swap the nodes of the DLL
+ *
+ * @x: first node
+ * @y: second node
+ *
+ * Return: void
+ */
+
+void node_swap(listint_t *x, listint_t *y)
 {
-	if (a->prev)
-		a->prev->next = b;
-	if (b->next)
-		b->next->prev = a;
-	a->next = b->next;
-	b->prev = a->prev;
-	a->prev = b;
-	b->next = a;
+	if (x->prev)
+		x->prev->next = y;
+	if (y->next)
+		y->next->prev = x;
+
+	x->next = y->next;
+	y->prev = x->prev;
+
+	x->prev = y;
+	y->next = x;
 }
+
 /**
-*tail_traverse- function that sorts from the tail back
-*
-*@head: head of list
-*@tail: tail of the list
-*@list: original head of the list
-*
-*Return: new head of the list
-*/
-listint_t *tail_traverse(listint_t *head, listint_t *tail, listint_t *list)
+ * trav_bkwd - start from the end and sort backwards
+ *
+ * @fwd: pointer at the end of fwd movement
+ * @bkwd: pointer starting from the end of fwd to move bkwds
+ * @list: the pointer to the end of the node
+ *
+ * Return: the pointer to the end of bkwd traversing
+ */
+
+listint_t *trav_bkwd(listint_t *fwd, listint_t *bkwd, listint_t *list)
 {
-	while (tail && tail->prev)
+	while (bkwd && bkwd->prev)
 	{
-		if (tail->n < tail->prev->n)
+		if (bkwd->n < bkwd->prev->n)
 		{
-			swap(tail->prev, tail);
-			if (tail->prev == NULL)
-				list = tail;
+			node_swap(bkwd->prev, bkwd);
+			if (bkwd->prev == NULL)
+				list = bkwd;
 			print_list(list);
 		}
 		else
-			tail = tail->prev;
-		if (tail->prev == NULL)
-			head = tail;
+			bkwd = bkwd->prev;
+		if (bkwd->prev == NULL)
+			fwd = bkwd;
 	}
-	return (head);
+	return (fwd);
 }
-
 /**
-*cocktail_sort_list - sorts linked list using cocktail shaker sort
-*
-*@list: doubly linked list to be sorted
-*/
+ * cocktail_sort_list - sort the DLL using CS-sort
+ *
+ * @list: a double pointer the node
+ *
+ * Return: void
+ */
+
 void cocktail_sort_list(listint_t **list)
 {
-	listint_t *tail, *head, *len;
-	int i = 0, j = 0, swaped = 1;
+	listint_t *fwd_trav, *bk_trav, *len;
+	int swap, i, j;
 
 	if (!list || !*list)
 		return;
+
 	len = *list;
 	for (i = 0; len; i++)
-	{
 		len = len->next;
-	}
+
 	if (i < 2)
 		return;
-	head = *list;
+
+	fwd_trav = *list;
+	swap = 1;
+	j = 0;
+
 	while (j < i)
 	{
-		swaped = 0;
-		while (head && head->next)
+		swap = 0;
+		while (fwd_trav && fwd_trav->next)
 		{
-			if (head->n > head->next->n)
+			if (fwd_trav->n > fwd_trav->next->n)
 			{
-				swap(head, head->next);
-				swaped++;
-				if (head->prev->prev == NULL)
-					*list = head->prev;
+				node_swap(fwd_trav, fwd_trav->next);
+				swap++;
+				if (fwd_trav->prev->prev == NULL)
+					*list = fwd_trav->prev;
 				print_list(*list);
 			}
 			else
-				head = head->next;
-			if (head->next == NULL)
-				tail = head;
+				fwd_trav = fwd_trav->next;
+			if (fwd_trav->next == NULL)
+				bk_trav = fwd_trav;
 		}
-		head = tail_traverse(head, tail, *list);
-		*list = head;
+		fwd_trav = trav_bkwd(fwd_trav, bk_trav, *list);
+		*list = fwd_trav;
 		j++;
 	}
 }
+
