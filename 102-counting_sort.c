@@ -1,72 +1,75 @@
 #include "sort.h"
+#include <stddef.h>
+#include <stdio.h>
+
 /**
-*integer_count- number of times integer appears in an array
-*
-*@array: array given
-*@size: size of array
-*@range: number to check for occurance
-*
-*Return: number of occurances
-*/
-int integer_count(int *array, size_t size, int range)
+ * max_element - finds the maximum number in the array
+ * @x: pointer to the array
+ * @n: the size of the array
+ *
+ * Return: the maximum number
+ */
+
+int max_element(int *x, size_t n)
 {
-	int total = 0;
 	size_t i;
+	int max;
 
-	for (i = 0; i < size; i++)
+	i = 0, max = 0;
+	while (i < n)
 	{
-		if (array[i] == range)
-			total++;
+		if (x[i] < 0)
+			return (-1);
+		if (x[i] > max)
+			max = x[i];
+		i++;
 	}
-	return (total);
+	return (max);
 }
-
 /**
-*counting_sort - counting sort algorithm
-*
-*@array: array to be sorted
-*@size: size of the array
-*/
+ * counting_sort - sort the array using counting sort algorithm
+ *
+ * @array: the pointer to the array
+ * @size: the size of the array
+ *
+ * Return: void
+ */
+
 void counting_sort(int *array, size_t size)
 {
-	int k = 0, b = 0, r = 0;
-	size_t i, c;
-	int *array2, *newArray;
+	int k, i;
+	int *aux_array, *sort_array;
 
-	if (!array || size < 2)
+	if (!array || !size || size < 2)
 		return;
-	for (i = 0; i < size; i++)
-	{
-		if (array[i] > k)
-		{
-			k = array[i];
-		}
-	}
-	array2 = malloc(sizeof(int) * (k + 1));
-	if (!array2)
+	k = max_element(array, size);
+	if (k == -1)
 		return;
-	for (c = 0; c < ((size_t)k + 1); c++)
+
+	aux_array = malloc(sizeof(int) * (k + 1));
+	if (!aux_array)
+		return;
+	for (i = 0; i <= k; i++)
+		aux_array[i] = 0;
+	for (i = 0; (size_t)i < size; i++)
+		aux_array[array[i]]++;
+	for (i = 1; i <= k; i++)
+		aux_array[i] = aux_array[i] + aux_array[i - 1];
+	print_array(aux_array, (size_t) k + 1);
+
+	sort_array = malloc(sizeof(int) * size);
+	if (!sort_array)
 	{
-		if (c == 0)
-			array2[c] = integer_count(array, size, r);
-		else
-		{
-			b = array2[c - 1] + integer_count(array, size, r);
-			array2[c] = b;
-		}
-		r++;
-	}
-	print_array(array2, (k + 1));
-	newArray = malloc(sizeof(int) * size);
-	if (!newArray)
-	{
-		free(array2);
+		free(aux_array);
+		aux_array = NULL;
 		return;
 	}
-	for (i = 0; i < size; i++)
-		newArray[array2[array[i]]-- - 1] = array[i];
-	for (i = 0; i < size; i++)
-		array[i] = newArray[i];
-	free(newArray);
-	free(array2);
+	for (i = 0; (size_t)i < size; i++)
+		sort_array[--aux_array[array[i]]] = array[i];
+	for (i = 0; (size_t)i < size; i++)
+		array[i] = sort_array[i];
+	free(sort_array);
+	free(aux_array);
+	sort_array = NULL;
+	aux_array = NULL;
 }
