@@ -64,7 +64,7 @@ void counting_sort(int *array, size_t size)
 		aux_array = NULL;
 		return;
 	}
-	for (i = 0; (size_t)i < size; i++)
+	for (i = size - 1; i >= 0; i--)
 		sort_array[--aux_array[array[i]]] = array[i];
 	for (i = 0; (size_t)i < size; i++)
 		array[i] = sort_array[i];
