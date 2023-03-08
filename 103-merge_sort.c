@@ -1,5 +1,4 @@
 #include "sort.h"
-#include <stddef.h>
 
 /**
  * array_dup - copy array A to B
@@ -77,7 +76,7 @@ void top_down_split_recursion(int *aux, size_t l_idx, size_t r_idx, int *array)
 {
 	size_t mid_point;
 
-	if (r_idx - l_idx <= 1)
+	if (r_idx - l_idx < 2)
 		return;
 
 	mid_point = (r_idx + l_idx) / 2;
