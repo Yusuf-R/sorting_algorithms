@@ -101,8 +101,6 @@ void merge_sort(int *array, size_t size)
 	size_t left_idx;
 	int *aux_arr;
 
-	left_idx = 0;
-
 	if (!array || size < 2)
 		return;
 
@@ -112,6 +110,7 @@ void merge_sort(int *array, size_t size)
 
 	array_dup(array, aux_arr, size);
 
-	top_down_split_recursion(array, left_idx, size, aux_arr);
+	left_idx = 0;
+	top_down_split_recursion(aux_arr, left_idx, size, array);
 	free(aux_arr);
 }
