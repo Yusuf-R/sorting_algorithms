@@ -1,83 +1,118 @@
 #include "sort.h"
+#include <stddef.h>
 
 /**
- * merge_compare - compares merges
- * @array: the integer array to sort
- * @start: the start index
- * @stop: the stop index
- * @new: the output array
+ * array_dup - copy array A to B
  *
- * Return: void.
+ * @x: first array
+ * @y: second array
+ * @n: size of array
+ *
+ * Return: void
+ *
  */
-void merge_compare(int *array, size_t start, size_t stop, int *new)
-{
-	size_t i = start, j, k, mid;
 
-	j = mid = (start + stop) / 2;
+void array_dup(int *x, int *y, size_t n)
+{
+	size_t i;
+
+	for (i = 0; i < n; i++)
+		y[i] = x[i];
+}
+
+/**
+ * merge - merges the sorted array
+ *
+ * @array: pointer to the array
+ * @l: start index
+ * @m: the mid point
+ * @r: the last index
+ * @aux: pointer to the array
+ *
+ * Return: void
+ */
+
+void merge(int *array, size_t l, size_t m, size_t r, int *aux)
+{
+	size_t i, j, k;
+
+	i = l;
+	j = m;
+
 	printf("Merging...\n");
 	printf("[left]: ");
-	print_array(array + start, mid - start);
+	print_array(array + l, m - l);
 	printf("[right]: ");
-	print_array(array + mid, stop - mid);
-	for (k = start; k < stop; k++)
-		if (i < mid && (j >= stop || array[i] <= array[j]))
-		{
+	print_array(array + m, r - m);
 
-			new[k] = array[i++];
+	for (k = l; k < r; k++)
+	{
+		if (i < m && (j >= r || array[i] <= array[j]))
+		{
+			aux[k] = array[i];
+			i++;
 		}
 		else
 		{
-			new[k] = array[j++];
+			aux[k] = array[j];
+			j++;
 		}
-	printf("[Done]: ");
-	print_array(new + start, stop - start);
-}
-
-/**
- * merge_sort_top_down - sorts top-down recursively
- * @array: the integer array to sort
- * @start: the start index
- * @stop: the stop index
- * @new: the output array
- *
- * Return: void.
- */
-void merge_sort_top_down(int *array, size_t start, size_t stop, int *new)
-{
-	size_t mid;
-
-	mid = (start + stop) / 2;
-	if (stop - start < 2)
-	{
-		return;
 	}
-	merge_sort_top_down(new, start, mid, array);
-	merge_sort_top_down(new, mid, stop, array);
-	merge_compare(new, start, stop, array);
+	printf("[Done]: ");
+	print_array(aux + l, r - l);
 }
 
+/**
+ * top_down_split_recursion - splits the array into two halves
+ *
+ * @aux: pointer to the auxilliary array
+ * @l_idx: start index
+ * @r_idx: last index
+ * @array: pointer to the array
+ *
+ * Return: void
+ */
+
+void top_down_split_recursion(int *aux, size_t l_idx, size_t r_idx, int *array)
+{
+	size_t mid_point;
+
+	if (r_idx - l_idx <= 1)
+		return;
+
+	mid_point = (r_idx + l_idx) / 2;
+
+	top_down_split_recursion(array, l_idx, mid_point, aux);
+	top_down_split_recursion(array, mid_point, r_idx, aux);
+
+	merge(aux, l_idx, mid_point, r_idx, array);
+
+}
 
 /**
- * merge_sort - sorts by merge sort algorithm
- * @array: the integer array to sort
+ * merge_sort - sort the array using merge sort
+ *
+ * @array: pointer to the array
  * @size: the size of the array
  *
- * Return: void.
+ * Return: void
  */
 void merge_sort(int *array, size_t size)
 {
-	int *new;
-	size_t i;
+	size_t left_idx;
+	int *aux_arr;
 
+	left_idx = 0;
 
 	if (!array || size < 2)
 		return;
 
-	new = malloc(sizeof(int) * size);
-	if (!new)
+	aux_arr = malloc(sizeof(int) * size);
+	if (!aux_arr)
 		return;
-	for (i = 0; i < size; i++)
-		new[i] = array[i];
-	merge_sort_top_down(array, 0, size, new);
-	free(new);
+
+	array_dup(array, aux_arr, size);
+
+	top_down_split_recursion(array, left_idx, size, aux_arr);
+	free(aux_arr);
 }
