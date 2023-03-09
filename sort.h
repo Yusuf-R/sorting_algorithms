@@ -1,9 +1,11 @@
-#ifndef _SORT_H
-#define _SORT_H
+#ifndef SORT_H
+#define SORT_H
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
+#include <stddef.h>
+#include <string.h>
 
 /**
  * struct listint_s - Doubly linked list node
@@ -39,5 +41,9 @@ void counting_sort(int *array, size_t size);
 void heap_sort(int *array, size_t size);
 void bitonic_sort(int *array, size_t size);
 void quick_sort_hoare(int *array, size_t size);
+
+
+void max_heapify(int *array, size_t size, size_t i, size_t heap_size);
+void swap(int *array, size_t temp_size, int *a, int *b);
 
 #endif
