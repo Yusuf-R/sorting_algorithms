@@ -1,93 +1,80 @@
 #include "sort.h"
-#define parent(x) (((x) - 1) / 2)
-#define leftchild(x) (((x) * 2) + 1)
 
 /**
- * swap - swaps 2 int values
- * @array: the integer array to sort
- * @size: the size of the array
- * @a: address of first value
- * @b: address of second value
+ * swap - swaps two item
+ *
+ * @array: pointer to the array
+ * @temp_size: storing size permanently
+ * @a: array to be sorted
+ * @b: size of the array
  *
  * Return: void
  */
-void swap(int *array, size_t size, int *a, int *b)
+
+void swap(int *array, size_t temp_size, int *a, int *b)
 {
-	if (*a != *b)
-	{
-		*a = *a + *b;
-		*b = *a - *b;
-		*a = *a - *b;
-	}
-	print_array((const int *)array, size);
+	int temp;
+
+	temp = *a;
+	*a = *b;
+	*b = temp;
+	print_array(array, temp_size);
 }
 
 /**
-*siftdown - siftdown implementation
-*
-*@array: array to be sorted
-*@start: start of array
-*@end: end of array
-*@size: size of array
-*
-*/
-void siftdown(int *array, size_t start, size_t end, size_t size)
-{
-	size_t root = start, _swap, child;
+ * max_heapify - heapify the array by swapping the root with the last child
+ *
+ * @array: array to be heapify
+ * @size: size of the array
+ * @i: index of the root
+ * @temp_size: storing temp size
+ *
+ * Return: void
+ */
 
-	while (leftchild(root) <= end)
+void max_heapify(int *array, size_t size, size_t i, size_t temp_size)
+{
+	size_t left_child = (2 * i) + 1;
+	size_t right_child = (2 * i) + 2;
+	size_t largest = i;
+
+	if (left_child < size && array[left_child] > array[largest])
+		largest = left_child;
+
+	if (right_child < size && array[right_child] > array[largest])
+		largest = right_child;
+
+	if (largest != i)
 	{
-		child = leftchild(root);
-		_swap = root;
-		if (array[_swap] < array[child])
-			_swap = child;
-		if (child + 1 <= end &&
-			array[_swap] < array[child + 1])
-			_swap = child + 1;
-		if (_swap == root)
-			return;
-		swap(array, size, &array[root], &array[_swap]);
-		root = _swap;
+		swap(array, temp_size, &array[i], &array[largest]);
+		max_heapify(array, size, largest, temp_size);
 	}
 }
 
 /**
-*heapify - makes heap in-place
-*
-*@array: array to be sorted
-*@size: size of array
-*
-*/
-void heapify(int *array, size_t size)
-{
-	ssize_t start;
+ * heap_sort - sort the array using heap sort algorithm
+ *
+ * @array: array to be sorted
+ * @size: size of the array
+ *
+ * Return: void
+ */
 
-	start = parent(size - 1);
-	while (start >= 0)
-	{
-		siftdown(array, start, size - 1, size);
-		start--;
-	}
-}
-/**
-*heap_sort - heap sort algorithm
-*
-*@array: array to sort
-*@size: size of array
-*
-*/
 void heap_sort(int *array, size_t size)
 {
-	size_t end;
+	int i;
+	size_t temp_size;
 
 	if (!array || size < 2)
 		return;
-	heapify(array, size);
-	end = size - 1;
-	while (end > 0)
+
+	temp_size = size;
+	for (i = (size - 1) / 2; i >= 0; i--)
+		max_heapify(array, size, (size_t)i, temp_size);
+
+	for (i = size - 1; i >= 0; i--)
 	{
-		swap(array, size, &array[end], &array[0]);
-		end--;
-		siftdown(array, 0, end, size);
+		swap(array, temp_size, &array[0], &array[i]);
+		max_heapify(array, (size_t)i, 0, temp_size);
 	}
 }
