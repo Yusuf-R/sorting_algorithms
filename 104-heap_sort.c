@@ -23,7 +23,7 @@ void swap(int *array, size_t temp_size, int *x, int *y)
 		print_array(array, temp_size);
 	}
 	else
-		return;
+		print_array(array, temp_size);
 }
 
 /**
