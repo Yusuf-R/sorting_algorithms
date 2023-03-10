@@ -5,8 +5,8 @@
  *
  * @array: pointer to the array
  * @temp_size: storing size permanently
- * @a: array to be sorted
- * @b: size of the array
+ * @x: array to be sorted
+ * @y: size of the array
  *
  * Return: void
  */
@@ -15,14 +15,15 @@ void swap(int *array, size_t temp_size, int *x, int *y)
 {
 	int temp;
 
-	if(*x != *y)
-        {
-                temp = *x;
-                *x = *y;
-                *y = temp;
-                print_array(array, temp_size);
+	if (*x != *y)
+	{
+		temp = *x;
+		*x = *y;
+		*y = temp;
+		print_array(array, temp_size);
 	}
-        return;
+	else
+		return;
 }
 
 /**
