@@ -11,14 +11,18 @@
  * Return: void
  */
 
-void swap(int *array, size_t temp_size, int *a, int *b)
+void swap(int *array, size_t temp_size, int *x, int *y)
 {
 	int temp;
 
-	temp = *a;
-	*a = *b;
-	*b = temp;
-	print_array(array, temp_size);
+	if(*x != *y)
+        {
+                temp = *x;
+                *x = *y;
+                *y = temp;
+                print_array(array, temp_size);
+	}
+        return;
 }
 
 /**
@@ -72,7 +76,7 @@ void heap_sort(int *array, size_t size)
 	for (i = (size - 1) / 2; i >= 0; i--)
 		max_heapify(array, size, (size_t)i, temp_size);
 
-	for (i = size - 1; i >= 0; i--)
+	for (i = size - 1; i > 0; i--)
 	{
 		swap(array, temp_size, &array[0], &array[i]);
 		max_heapify(array, (size_t)i, 0, temp_size);
