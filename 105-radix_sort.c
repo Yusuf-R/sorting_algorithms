@@ -1,78 +1,88 @@
 #include "sort.h"
-
 /**
- * get_digit - gets a digit from a number
- * @number: the integer
- * @digit: the digit position to get
+ * radix_sort -  sort the array using LSD for radix sort algorithm
  *
- * Return: the digit value at given position
-**/
-int get_digit(long number, int digit)
-{
-	long i = 0L, pow = 1L, ret;
-
-	for (i = 0; i < digit; i++)
-		pow *= 10L;
-	ret = ((number / pow) % 10);
-	return (ret);
-}
-
-/**
- * radix_pass - sorts by radix
- * @array: the integer array to sort
+ * @array: the pointer to the array
  * @size: the size of the array
- * @digit: the current digit to check
- * @new_array: target array of same size
  *
- * Return: void.
+ * Return: void
  */
-int radix_pass(int *array, ssize_t size, int digit, int *new_array)
-{
-	ssize_t i;
-	int buckets[10] = {0};
 
-	for (i = 0; i < size; i++)
-		buckets[get_digit(array[i], digit)]++;
-	for (i = 1; i <= 9; i++)
-		buckets[i] += buckets[i - 1];
-	for (i = size - 1; i > -1; i--)
-		new_array[buckets[get_digit(array[i], digit)]-- - 1] = array[i];
-	return (1);
-}
 
-/**
- * radix_sort - sorts by radix
- * @size: the size of the array
- * @array: the integer array to sort
- *
- * Return: the gap size
- */
 void radix_sort(int *array, size_t size)
 {
-	int *old_array, *new_array, *temp_ptr, *ptr, max = 0;
-	size_t i, sd = 1;
+	int max_num, place_val;
 
 	if (!array || size < 2)
 		return;
 
-	for (i = 0; i < size; i++)
+	max_num = max_element(array, size);
+
+	for (place_val = 1; max_num / place_val > 0; place_val *= 10)
+	{
+		counting_sort_lsd(array, size, place_val);
+		print_array(array, size);
+	}
+}
+
+/**
+ * max_element - find the maximum element in the array
+ *
+ * @array: the pointer to the array
+ * @size: the size of the array
+ *
+ * Return: the maximum element in the array
+ */
+
+int max_element(int *array, size_t size)
+{
+	int max;
+	size_t i;
+
+	max = 0;
+	i = 0;
+
+	while (i < size)
+	{
 		if (array[i] > max)
 			max = array[i];
-	while (max /= 10)
-		sd++;
-	old_array = array;
-	new_array = ptr = malloc(sizeof(int) * size);
-	if (!new_array)
-		return;
-	for (i = 0; i < sd; i++)
-	{
-		radix_pass(old_array, (ssize_t)size, i, new_array);
-		temp_ptr = old_array;
-		old_array = new_array;
-		new_array = temp_ptr;
-		print_array(old_array, size);
+		i++;
 	}
-	for (i = 0; i < size; i++)
-		array[i] = old_array[i];
-	free(ptr);
+	return (max);
+}
+
+/**
+ * counting_sort_lsd -  sort the array using LSD for counting sort algorithm
+ *
+ * @array: the pointer to the array
+ * @size: the size of the array
+ * @place_val: the place value of the array element.
+ *
+ * Return: void
+ */
+
+void counting_sort_lsd(int *array, size_t size, int place_val)
+{
+	int i, j, k;
+	int bucket[10] = {0};
+	int *temp;
+
+	for (i = 0; (size_t)i < size; i++)
+		bucket[(array[i] / place_val) % 10]++;
+	for (i = 1; i < 10; i++)
+		bucket[i] += bucket[i - 1];
+
+	temp = malloc(sizeof(int) * size);
+	for (i = size - 1; i >= 0; i--)
+	{
+		j = bucket[(array[i] / place_val) % 10] - 1;
+		k = array[i];
+		temp[j] = k;
+		bucket[(array[i] / place_val) % 10]--;
+	}
+	for (i = 0; (size_t)i < size; i++)
+	{
+		array[i] = temp[i];
+	}
+	free(temp);
 }

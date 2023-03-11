@@ -45,5 +45,7 @@ void quick_sort_hoare(int *array, size_t size);
 
 void max_heapify(int *array, size_t size, size_t i, size_t heap_size);
 void swap(int *array, size_t temp_size, int *a, int *b);
+int max_element(int *array, size_t size); 
+void counting_sort_lsd(int *array, size_t size, int place_val);
 
 #endif
