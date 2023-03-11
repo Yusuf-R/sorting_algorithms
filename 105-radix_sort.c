@@ -1,4 +1,5 @@
 #include "sort.h"
+
 /**
  * radix_sort -  sort the array using LSD for radix sort algorithm
  *
@@ -73,6 +74,9 @@ void counting_sort_lsd(int *array, size_t size, int place_val)
 		bucket[i] += bucket[i - 1];
 
 	temp = malloc(sizeof(int) * size);
+	if (!temp)
+		return;
+
 	for (i = size - 1; i >= 0; i--)
 	{
 		j = bucket[(array[i] / place_val) % 10] - 1;
