@@ -71,7 +71,7 @@ int hoare_partition(int *array, size_t size, int low, int high)
 
 void hoare_algo(int *array, size_t size, int start, int end)
 {
-	if (start >= 0 && end >= 0 && start < end)
+	if (start < end)
 	{
 		int pivot_index = hoare_partition(array, size, start, end);
 
