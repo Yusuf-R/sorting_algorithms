@@ -1,4 +1,5 @@
 #include "sort.h"
+#include <sys/types.h>
 
 /**
  * swap - swap the element
@@ -14,13 +15,10 @@ void swap(int *array, size_t size, int *x, int *y)
 {
 	int temp;
 
-	if (*x != *y)
-	{
-		temp = *x;
-		*x = *y;
-		*y = temp;
-	}
-	print_array((const int *)array, size);
+	temp = *x;
+	*x = *y;
+	*y = temp;
+	print_array(array, size);
 }
 
 
@@ -34,28 +32,26 @@ void swap(int *array, size_t size, int *x, int *y)
  *
  * Return: the index of the pivot
  */
-int hoare_partition(int *array, size_t size, int low, int high)
+size_t hoare_partition(int *array, ssize_t size, ssize_t low, ssize_t high)
 {
-	int pivot_val, l_ptr, r_ptr;
+	ssize_t pivot_val, l_ptr, r_ptr;
 
 	pivot_val = array[high];
 	l_ptr = low - 1;
 	r_ptr = high + 1;
 
-	while (1)
+	while (l_ptr < size)
 	{
-		do
-			l_ptr++;
-		while (l_ptr <= low && array[l_ptr] < pivot_val);
-
-		do
-			r_ptr--;
-		while (r_ptr <= high && array[r_ptr] > pivot_val);
-
-		if (l_ptr >= r_ptr)
-			return (r_ptr);
-		swap(array, size, &array[l_ptr], &array[r_ptr]);
+		while (array[++l_ptr] < pivot_val)
+			;
+		while (array[--r_ptr] > pivot_val)
+			;
+		if (l_ptr < r_ptr)
+			swap(array, size, &array[l_ptr], &array[r_ptr]);
+		else if (l_ptr >= r_ptr)
+			break;
 	}
+	return (l_ptr);
 }
 
 /**
@@ -69,14 +65,14 @@ int hoare_partition(int *array, size_t size, int low, int high)
  * Return: void
  */
 
-void hoare_algo(int *array, size_t size, int start, int end)
+void hoare_algo(int *array, ssize_t size, ssize_t start, ssize_t end)
 {
 	if (start < end)
 	{
-		int pivot_index = hoare_partition(array, size, start, end);
+		size_t pivot_index = hoare_partition(array, size, start, end);
 
-		hoare_algo(array, size, start, pivot_index);
-		hoare_algo(array, size, pivot_index + 1, end);
+		hoare_algo(array, size, start, pivot_index - 1);
+		hoare_algo(array, size, pivot_index, end);
 	}
 }
 
