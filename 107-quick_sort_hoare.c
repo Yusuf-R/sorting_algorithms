@@ -14,10 +14,13 @@ void swap(int *array, size_t size, int *x, int *y)
 {
 	int temp;
 
-	temp = *x;
-	*x = *y;
-	*y = temp;
-	print_array(array, size);
+	if (*x != *y)
+	{
+		temp = *x;
+		*x = *y;
+		*y = temp;
+		print_array(array, size);
+	}
 
 }
 
