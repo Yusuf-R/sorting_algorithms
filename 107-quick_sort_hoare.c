@@ -20,7 +20,7 @@ void swap(int *array, size_t size, int *x, int *y)
 		*x = *y;
 		*y = temp;
 	}
-	print_array((const int*)array, size);
+	print_array((const int *)array, size);
 }
 
 
@@ -39,7 +39,7 @@ int hoare_partition(int *array, size_t size, int low, int high)
 	int pivot_val, l_ptr, r_ptr;
 
 	pivot_val = array[high];
-	l_ptr = low - 1;  
+	l_ptr = low - 1;
 	r_ptr = high + 1;
 
 	while (1)
