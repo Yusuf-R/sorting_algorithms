@@ -21,8 +21,10 @@ void swap(int *array, size_t size, int *x, int *y)
 		*y = temp;
 		print_array(array, size);
 	}
-
+	else
+		print_array(array, size);
 }
+
 
 /**
  * hoare_partition - get the index of the pivot using hoare partitioning scheme
