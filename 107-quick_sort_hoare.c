@@ -1,4 +1,5 @@
 #include "sort.h"
+#include <stdio.h>
 #include <sys/types.h>
 
 /**
@@ -40,18 +41,20 @@ size_t hoare_partition(int *array, ssize_t size, ssize_t low, ssize_t high)
 	l_ptr = low - 1;
 	r_ptr = high + 1;
 
-	while (l_ptr < size)
+	while (1)
 	{
-		while (array[++l_ptr] < pivot_val)
-			;
-		while (array[--r_ptr] > pivot_val)
-			;
-		if (l_ptr < r_ptr)
-			swap(array, size, &array[l_ptr], &array[r_ptr]);
-		else if (l_ptr >= r_ptr)
-			break;
+		do
+			l_ptr++;
+		while (array[l_ptr] < pivot_val);
+
+		do
+			r_ptr--;
+		while (array[r_ptr] > pivot_val);
+
+		if (l_ptr >= r_ptr)
+			return (l_ptr);
+		swap(array, size, &array[l_ptr], &array[r_ptr]);
 	}
-	return (l_ptr);
 }
 
 /**
