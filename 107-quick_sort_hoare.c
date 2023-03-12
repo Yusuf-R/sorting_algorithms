@@ -46,11 +46,11 @@ int hoare_partition(int *array, size_t size, int low, int high)
 	{
 		do
 			l_ptr++;
-		while (array[l_ptr] < pivot_val);
+		while (l_ptr <= low && array[l_ptr] < pivot_val);
 
 		do
 			r_ptr--;
-		while (array[r_ptr] > pivot_val);
+		while (r_ptr <= high && array[r_ptr] > pivot_val);
 
 		if (l_ptr >= r_ptr)
 			return (r_ptr);
@@ -75,8 +75,8 @@ void hoare_algo(int *array, size_t size, int start, int end)
 	{
 		int pivot_index = hoare_partition(array, size, start, end);
 
-		hoare_algo(array, size, start, pivot_index - 1);
-		hoare_algo(array, size, pivot_index, end);
+		hoare_algo(array, size, start, pivot_index);
+		hoare_algo(array, size, pivot_index + 1, end);
 	}
 }
 
